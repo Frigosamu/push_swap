@@ -1,7 +1,3 @@
-
-*Este proyecto ha sido creado como parte del currículo de 42 por efiguere, mariredo*
-
-
 # DESCRIPCIÓN
 
 push_swap es un proyecto cuyo objetivo es ordenar una lista de números enteros utilizando dos stacks (a y b) y un conjunto limitado de operaciones (sa, pb, ra, etc.).
