@@ -1,25 +1,25 @@
-# DESCRIPCIÓN
+# DESCRIPTION
 
-push_swap es un proyecto cuyo objetivo es ordenar una lista de números enteros utilizando dos stacks (a y b) y un conjunto limitado de operaciones (sa, pb, ra, etc.).
+push_swap is a project whose objective is to sort a list of integers using two stacks (a and b) and a limited set of operations (sa, pb, ra, etc.).
 
-El reto principal consiste en encontrar la forma más eficiente posible de ordenar los números, minimizando el número de movimientos realizados.
+The main challenge is to find the most efficient way possible to sort the numbers, minimizing the number of moves performed.
 
-El proyecto incluye diferentes estrategias de ordenación según el tamaño del stack:
-algoritmos simples para pocos números,
-algoritmos por chunks para tamaños intermedios,
-algoritmo radix para grandes cantidades de datos.
+The project includes different sorting strategies depending on the size of the stack:
+simple algorithms for few numbers,
+chunk-based algorithms for intermediate sizes,
+radix algorithm for large amounts of data.
 
-# INSTRUCCIONES
+# INSTRUCTIONS
 
-Compilación
+Compilation
 make
-Ejecución
+Execution
 
 ```
 ./push_swap 3 2 1 5 4 
  ```
 
-También es posible seleccionar manualmente el algoritmo:
+It is also possible to manually select the algorithm:
 
 ```
 ./push_swap --simple 3 2 1
@@ -27,98 +27,98 @@ También es posible seleccionar manualmente el algoritmo:
 ./push_swap --complex 10 4 7 2 1
 ```
 
-Opcionalmente, puede utilizarse:
+Optionally, you can use:
 
 ```
 --bench
 ```
 
-para recopilar estadísticas de movimientos.
+to collect movement statistics.
 
-# RECURSOS
+# RESOURCES
 
-Referencias utilizadas
-Documentación oficial de C
-Manual de operaciones de push_swap
-Explicaciones sobre algoritmos Radix Sort
-Recursos sobre listas doblemente enlazadas y manipulación de stacks
-Videos y artículos sobre estrategias de optimización en push_swap
-Uso de IA
+References used
+Official C documentation
+push_swap operations manual
+Explanations about Radix Sort algorithms
+Resources on doubly linked lists and stack manipulation
+Videos and articles on optimization strategies in push_swap
+Use of AI
 
-Se ha utilizado IA como apoyo para:
+AI has been used as support for:
 
-Comprensión y depuración de algoritmos.
-Explicación de estructuras y lógica.
-Optimización y refactorización de funciones.
-Resolución de errores y validaciones.
-Ayuda en la documentación del proyecto (Readme).
+Understanding and debugging algorithms.
+Explanation of structures and logic.
+Optimization and refactoring of functions.
+Error resolution and validations.
+Help with project documentation (README).
 
-La implementación, adaptación y validación final del código han sido realizadas manualmente durante el desarrollo del proyecto.
+The implementation, adaptation and final validation of the code have been performed manually during project development.
 
-# DETALLES DEL PROYECTO Y JUSTIFICACIÓN DE USO
-## 1. Justificación de los valores límite (Umbrales)
-El índice de desorden se calcula con ft_compute_disorder, que mide cuántos números están fuera de orden comparado con el máximo posible.
-Para ello cuenta las inversiones (pares de números mal colocados)
-las divide entre el número total de pares posibles.
-Así obtiene un valor entre:
-0 → lista completamente ordenada
-1 → lista completamente desordenada.
+# PROJECT DETAILS AND JUSTIFICATION OF USE
+## 1. Justification of threshold values (Thresholds)
+The disorder index is calculated with ft_compute_disorder, which measures how many numbers are out of order compared to the maximum possible.
+To do this it counts inversions (pairs of misplaced numbers)
+and divides them by the total number of possible pairs.
+Thus it obtains a value between:
+0 → completely sorted list
+1 → completely unsorted list.
 
-### Régimen Bajo (< 0.2)
-Un valor menor que 0.2 significa que el stack está casi ordenado y solo hay unos pocos números fuera de sitio.
-Usar algoritmos grandes aquí haría movimientos innecesarios.
+### Low Regime (< 0.2)
+A value less than 0.2 means that the stack is almost sorted and only a few numbers are out of place.
+Using large algorithms here would make unnecessary moves.
 
-### Régimen Medio (0.2 ≤ desorden < 0.5)
-El stack tiene un desorden intermedio.
-En este caso conviene dividir los números en bloques para reducir rotaciones y ordenar de forma más eficiente.
+### Medium Regime (0.2 ≤ disorder < 0.5)
+The stack has intermediate disorder.
+In this case it is convenient to divide the numbers into blocks to reduce rotations and sort more efficiently.
 
-### Régimen Alto (≥ 0.5)
-El stack está muy desordenado o casi invertido.
-Aquí se necesita un algoritmo más automático y estable, que funcione bien sin importar el orden inicial.
+### High Regime (≥ 0.5)
+The stack is very disordered or almost inverted.
+Here you need a more automatic and stable algorithm that works well regardless of the initial order.
 ---
 
-## 2. Análisis de las Técnicas Internas y Complejidad
+## 2. Analysis of Internal Techniques and Complexity
 
-### 🟢 Régimen Bajo: ft_simple (Adaptación del orden por inserción)
+### 🟢 Low Regime: ft_simple (Adaptation of insertion sort)
 
-**Descripción:**
-Cuando el stack está casi ordenado, el algoritmo detecta los elementos fuera de sitio, los mueve temporalmente a B y luego los reinserta en la posición correcta dentro de A.
-Como la mayoría de números ya están bien colocados, se necesitan pocas operaciones.
+**Description:**
+When the stack is almost sorted, the algorithm detects out-of-place elements, temporarily moves them to B, and then reinserts them in the correct position within A.
+Since most numbers are already well placed, few operations are needed.
 
-**Complejidad Temporal (Peor caso):** O(n)
-El número de movimientos crece de forma aproximadamente lineal, ya que hay pocos elementos desordenados.
+**Time Complexity (Worst case):** O(n)
+The number of moves grows approximately linearly, since there are few disordered elements.
 
-**Complejidad Espacial:** O(1)
-No utiliza memoria extra significativa, trabaja directamente sobre los stacks existentes.
+**Space Complexity:** O(1)
+It does not use significant extra memory, works directly on the existing stacks.
 ---
 
-### 🟡 Régimen Medio: ft_medium (uso de chunks)
+### 🟡 Medium Regime: ft_medium (chunk-based)
 
-**Descripción:**
-El algoritmo divide los números en bloques (“chunks”) para ordenar el stack de forma más eficiente.
-Primero asigna un índice a cada elemento y después mueve a B los números que pertenecen al bloque actual. El tamaño de esos bloques se adapta según el tamaño del stack.
-Una vez todos los elementos están en B, se devuelven a A buscando siempre el valor más grande y usando la rotación más corta (rb o rrb).
+**Description:**
+The algorithm divides the numbers into blocks ("chunks") to sort the stack more efficiently.
+It first assigns an index to each element and then moves to B the numbers that belong to the current block. The size of these blocks adapts according to the size of the stack.
+Once all elements are in B, they are returned to A by always looking for the largest value and using the shortest rotation (rb or rrb).
 
-**Complejidad Temporal (Peor caso):** O(n \sqrt{n})
-Dividir el stack en bloques reduce el número de búsquedas y rotaciones necesarias durante la ordenación.
+**Time Complexity (Worst case):** O(n√n)
+Dividing the stack into blocks reduces the number of searches and rotations needed during sorting.
 
-**Complejidad Espacial:** $O(n)$
-Necesita memoria extra para almacenar temporalmente los índices usados durante el preprocesado del stack.
+**Space Complexity:** O(n)
+Requires extra memory to temporarily store the indices used during stack preprocessing.
 
 ---
 
-### 🔴 Régimen Alto: ft_complex_radix (Radix Sort Binario por Bits)
+### 🔴 High Regime: ft_complex_radix (Binary Radix Sort by Bits)
 
-**Descripción:**
-Este algoritmo ordena los números usando su representación en binario.
-En cada pasada revisa un bit concreto, empezando por el menos significativo:
-si el bit es 0, el número se mueve a B
-si el bit es 1, el número permanece en A
-Después los elementos de B vuelven a A y el proceso se repite con el siguiente bit.
-Como funciona bit a bit, el rendimiento es estable incluso cuando el stack está completamente desordenado.
+**Description:**
+This algorithm sorts numbers using their binary representation.
+In each pass it checks a specific bit, starting with the least significant:
+if the bit is 0, the number is moved to B
+if the bit is 1, the number stays in A
+Then the elements from B are returned to A and the process repeats with the next bit.
+Since it works bit by bit, performance is stable even when the stack is completely disordered.
 
-**Complejidad Temporal (Peor caso):** O(nlogn)
-El algoritmo hace varias pasadas sobre el stack, aproximadamente una por cada bit necesario para representar los índices.
+**Time Complexity (Worst case):** O(n log n)
+The algorithm makes multiple passes over the stack, approximately one for each bit needed to represent the indices.
 
-**Complejidad Espacial:** O(n)
-Necesita memoria adicional durante la fase de indexación inicial de los elementos.
+**Space Complexity:** O(n)
+Requires additional memory during the initial indexing phase of the elements.
